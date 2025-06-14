@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) {
+        const int m = maze.size();
+    const int n = maze[0].size();
+    const vector<int> dirs{0, -1, 0, 1, 0};
+    queue<pair<int, int>> q;
+    q.emplace(entrance[1], entrance[0]);    
+    for (int steps = 0; !q.empty(); ++steps) {      
+      for (int s = q.size(); s; --s) {      
+        const auto [x, y] = q.front(); q.pop();        
+        if (x == 0 || x == n - 1 || y == 0 || y == m - 1)
+          if (x != entrance[1] || y != entrance[0])
+            return steps;
+        for (int i = 0; i < 4; ++i) {
+          const int tx = x + dirs[i];
+          const int ty = y + dirs[i + 1];
+          if (tx < 0 || tx >= n || ty < 0 || ty >= m || maze[ty][tx] != '.') continue;
+          maze[ty][tx] = '*';
+          q.emplace(tx, ty);
+        }
+      }      
+    }
+    return -1;
+        
+    }
+};
